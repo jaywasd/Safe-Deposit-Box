@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <title>Chat Interface</title>
+      <style>
+    body {
+      background-color: #ffddbf;
+      font-weight: bold;
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 17px;
+      color: #926239;
+      padding: 0;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #message-container {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      margin: 10px;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    #message-container div {
+      border: 2px solid #926239;
+      border-radius: 12px;
+      padding: 5px;
+    }
+
+    #message-container div:nth-child(2n) {
+      background-color: #FFF;
+    }
+
+    #send-container {
+      background-color: #ffddbf;
+      /* color: #926239 1px solid; */
+      font-weight: bold;
+      position: fixed;
+      padding-bottom: 30px;
+      bottom: 0;
+      max-width: 1200px;
+      width: 80%;
+      display: flex;
+    }
+
+    #message-input {
+      background-color: #ffddbf;
+      font-weight: bold;
+      flex-grow: 1;
+      border: 2px solid #926239;
+      border-radius: 12px;
+      padding: 5px;
+    }
+    #send-button {
+      color: #fff;
+      background: #926239;
+      font-size: 18px;
+      border-radius: 12px;
+      border: #926239 1px solid;
+      /* margin-top:20px; */
+      padding: 10px 20px;
+    }
+    #send-button:hover {
+      background-color: #926239;
+      color: #fff;
+    }
+  </style>
+  </head>
+  <body>
+    <div id="message-container"></div>
+    <form id="send-container">
+      <input type="text" id="message-input" placeholder="Enter message"/>
+      <button type="submit" id="send-button">Send</button>
+    </form>
+    <script>
+      // this is where our server is hosting socket.io
+      const socket = io("https://csci-5410-2021.uc.r.appspot.com");
+      const messageContainer = document.getElementById("message-container");
+      const messageForm = document.getElementById("send-container");
+      const messageInput = document.getElementById("message-input");
+
+      const name = prompt("What is your name?");
+      appendMessage("You joined");
+      socket.emit("new-user", name);
+
+      socket.on("chat-message", (data) => {
+        appendMessage(`${data.name}: ${data.message}`);
+      });
+
+      socket.on("user-connected", (name) => {
+        appendMessage(`${name} connected`);
+      });
+
+      socket.on("user-disconnected", (name) => {
+        appendMessage(`${name} disconnected`);
+      });
+
+      messageForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const message = messageInput.value;
+        appendMessage(`You: ${message}`);
+        socket.emit("send-chat-message", message);
+        messageInput.value = "";
+      });
+
+      function appendMessage(message) {
+        const messageElement = document.createElement("div");
+        messageElement.innerText = message;
+        messageContainer.append(messageElement);
+      }
+    </script>
+  </body>
+</html>

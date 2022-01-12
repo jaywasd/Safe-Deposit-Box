@@ -1,0 +1,3 @@
+serverless-frontend/node_modules/*
+serverless-frontend/.vscode
+.idea

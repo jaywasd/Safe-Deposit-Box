@@ -1,0 +1,8 @@
+{
+  "name": "sample-http",
+  "version": "0.0.1",
+  "dependencies": {
+    "@google-cloud/vision": "^2.4.0",
+    "dotenv": "^10.0.0"
+  }
+}

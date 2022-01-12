@@ -1,0 +1,17 @@
+<body>
+  <h1>Chat Messenger</h1>
+  <div class="container mt-5">
+    <form action="/messageUser" method="POST">
+        <div class="container">
+            <p><%-userMsg%></p>
+          </div>
+          <div class="container">
+            <p><%-otherUserMsg%></p>
+          </div>
+          <div>
+            <input type="text" name="message" placeholder="enter message" />
+            <button type="submit">send</button>
+          </div>
+    </form>
+  </div>
+</body>
